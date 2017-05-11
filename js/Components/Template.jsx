@@ -1,7 +1,20 @@
 import React from 'react'
+import config from '../config.js'
 import {Link, IndexLink} from 'react-router'
 
+
 class Template extends React.Component{
+  componentDidMount() {
+      if (!localStorage.getItem('cart')) { // localStorage jest obiektem, ktory ma funkcje getItem, i tam szuka 'cart'
+          fetch(config.apiUrl + '/createCart')
+              .then(response => response.json())
+              .then(responseJson => {
+                  localStorage.setItem('cart', responseJson.id)
+              })
+      }
+  }
+
+
 render(){
  return <div>
    <nav className="navbar navbar-default">
@@ -26,7 +39,7 @@ render(){
                </ul>
                <ul className="nav navbar-nav navbar-right">
                    <li>
-                   <Link to="/cart">
+                   <Link to={"/cart/" + localStorage.getItem("cart")}>
                          <i className='glyphicon glyphicon-shopping-cart'></i>
                    </Link>
                    </li>
